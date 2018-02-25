@@ -147,4 +147,128 @@ public class Machine {
     //
     // ENTER YOUR CODE FOR THE OTHER INSTRUCTION CLASSES HERE.
     //
+    public static class Divide implements Instruction{
+
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push(op1 / op2);
+        }
+            @Override
+            public String toString() {
+                return "DIV";
+            }
+        }
+
+
+    public static class Load implements Instruction{
+
+        private String a;
+        public Load(String a) {
+            this.a = a;
+        }
+        @Override
+        public void execute() {
+            int get = table.get( this.a );
+            stack.push(get);
+        }
+
+        @Override
+        public String toString() {
+            return "LOAD "+ a;
+        }
+    }
+
+    public static class Multiply implements Instruction{
+
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push( op1 * op2 );
+        }
+
+        @Override
+        public String toString() {
+            return "MUL";
+        }
+    }
+
+    public static class Negate implements Instruction{
+
+        @Override
+        public void execute() {
+            int op1 = stack.pop();
+            int n = -op1;
+            stack.push(n);
+        }
+
+        @Override
+        public String toString() {
+            return "NEG";
+        }
+    }
+
+    public static class Print implements Instruction{
+
+        @Override
+        public void execute() {
+            int op1 = stack.pop();
+            System.out.println("*** "+ op1);
+        }
+
+        @Override
+        public String toString() {
+            return "PRINT";
+        }
+    }
+
+    public static class PushConst implements Instruction{
+
+        private int a;
+        public PushConst(int a) {
+            this.a = a;
+        }
+        @Override
+        public void execute() {
+            stack.push(a);
+        }
+
+        @Override
+        public String toString() {
+            return "PUSH "+ a;
+        }
+    }
+
+    public static class SquareRoot implements Instruction{
+
+        @Override
+        public void execute() {
+            int op1 = stack.pop();
+            int sq = (int)Math.sqrt(op1);
+            stack.push(sq);
+        }
+
+        @Override
+        public String toString() {
+            return "SQRT";
+        }
+
+    }
+
+    public static class Subtract implements Instruction{
+
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push( op1 - op2 );
+        }
+
+        @Override
+        public String toString() {
+            return "SUB";
+        }
+    }
 }
