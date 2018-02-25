@@ -149,12 +149,20 @@ public class Machine {
     //
     public static class Divide implements Instruction{
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
             int op2 = stack.pop();
             int op1 = stack.pop();
             stack.push(op1 / op2);
         }
+
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return
+         */
             @Override
             public String toString() {
                 return "DIV";
@@ -164,24 +172,38 @@ public class Machine {
 
     public static class Load implements Instruction{
 
-        private String a;
-        public Load(String a) {
-            this.a = a;
+        /**
+         *Stores the name of get key
+         */
+        private String ident;
+        public Load(String ident) {
+            this.ident = ident;
         }
+
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
-            int get = table.get( this.a );
+            int get = table.get(this.ident);
             stack.push(get);
         }
 
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "LOAD" followed by key that we get
+         */
         @Override
         public String toString() {
-            return "LOAD "+ a;
+            return "LOAD "+ ident;
         }
     }
 
     public static class Multiply implements Instruction{
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
             int op2 = stack.pop();
@@ -189,6 +211,10 @@ public class Machine {
             stack.push( op1 * op2 );
         }
 
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "MUL"
+         */
         @Override
         public String toString() {
             return "MUL";
@@ -197,6 +223,9 @@ public class Machine {
 
     public static class Negate implements Instruction{
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
             int op1 = stack.pop();
@@ -204,6 +233,10 @@ public class Machine {
             stack.push(n);
         }
 
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "NEG"
+         */
         @Override
         public String toString() {
             return "NEG";
@@ -212,12 +245,19 @@ public class Machine {
 
     public static class Print implements Instruction{
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
             int op1 = stack.pop();
             System.out.println("*** "+ op1);
         }
 
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "PRINT"
+         */
         @Override
         public String toString() {
             return "PRINT";
@@ -226,23 +266,37 @@ public class Machine {
 
     public static class PushConst implements Instruction{
 
-        private int a;
-        public PushConst(int a) {
-            this.a = a;
-        }
-        @Override
-        public void execute() {
-            stack.push(a);
+        /**
+         *integer that we push in the stack
+         */
+        private int constant;
+        public PushConst(int constant) {
+            this.constant = constant;
         }
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
+        @Override
+        public void execute() {
+            stack.push(constant);
+        }
+
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "PUSH" followed by the constant
+         */
         @Override
         public String toString() {
-            return "PUSH "+ a;
+            return "PUSH "+ constant;
         }
     }
 
     public static class SquareRoot implements Instruction{
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
             int op1 = stack.pop();
@@ -250,6 +304,10 @@ public class Machine {
             stack.push(sq);
         }
 
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "SQRT"
+         */
         @Override
         public String toString() {
             return "SQRT";
@@ -259,6 +317,9 @@ public class Machine {
 
     public static class Subtract implements Instruction{
 
+        /**
+         * Run this instruction on the Machine, using the Machine's value stack and symbol table.
+         */
         @Override
         public void execute() {
             int op2 = stack.pop();
@@ -266,6 +327,10 @@ public class Machine {
             stack.push( op1 - op2 );
         }
 
+        /**
+         * Show the instruction using text so it can be understood by a person.
+         * @return "SUB"
+         */
         @Override
         public String toString() {
             return "SUB";
