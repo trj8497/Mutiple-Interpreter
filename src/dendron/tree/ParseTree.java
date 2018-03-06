@@ -4,6 +4,8 @@ import dendron.machine.Machine;
 import dendron.tree.ActionNode;
 import dendron.tree.ExpressionNode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,8 @@ import java.util.Map;
  */
 public class ParseTree {
 
+    private List<String> prog;
+    private Program pr;
     /**
      * Parse the entire list of program tokens. The program is a
      * sequence of actions (statements), each of which modifies something
@@ -24,6 +28,12 @@ public class ParseTree {
      * @param program the token list (Strings)
      */
     public ParseTree( List< String > program ) {
+        pr = new Program();
+        prog = program;
+        while(prog.size()!=0){
+            ActionNode action = parseAction(prog);
+            pr.addAction​(action);
+        }
     }
 
     /**
@@ -33,6 +43,16 @@ public class ParseTree {
      * @return a parse tree for the action
      */
     private ActionNode parseAction( List< String > program ) {
+        if (program.get(0).equals("@")) {
+            program.remove(0);
+            ActionNode action = new Print(parseExpr(program));
+            return action;
+        }
+        else if(program.get(0).equals(":=")){
+            program.remove(0);
+            ActionNode action = new Assignment(program.remove(0), parseExpr(program));
+            return action;
+        }
         return null;
     }
 
@@ -43,7 +63,22 @@ public class ParseTree {
      * @return a parse tree for this expression
      */
     private ExpressionNode parseExpr( List< String > program ) {
-        return null;
+        if (BinaryOperation.OPERATORS.contains(program.get(0))){
+            ExpressionNode binary = new BinaryOperation(program.remove(0), parseExpr(program), parseExpr(program));
+            return binary;
+        }
+        else if (UnaryOperation.OPERATORS.contains(program.get(0))){
+            ExpressionNode unary = new UnaryOperation(program.remove(0), parseExpr(program));
+            return unary;
+        }
+        else if (program.get(0).matches("^[a-zA-Z].*")){
+            ExpressionNode var = new Variable(program.remove(0));
+            return var;
+        }
+        else{
+            ExpressionNode con = new Constant(Integer.parseInt(program.remove(0)));
+            return con;
+        }
     }
 
     /**
@@ -52,6 +87,7 @@ public class ParseTree {
      * @see dendron.tree.ActionNode#infixDisplay()
      */
     public void displayProgram() {
+        pr.infixDisplay();
     }
 
     /**
@@ -59,6 +95,8 @@ public class ParseTree {
      * @see dendron.tree.ActionNode#execute(Map)
      */
     public void interpret() {
+        Map<String, Integer> symTab = new HashMap<>();
+        pr.execute(symTab);
     }
 
     /**
@@ -68,7 +106,7 @@ public class ParseTree {
      * @see Machine.Instruction#execute()
      */
     public List< Machine.Instruction > compile() {
-        return null;
+        return pr.emit();
     }
 
 }
