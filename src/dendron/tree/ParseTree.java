@@ -1,5 +1,6 @@
 package dendron.tree;
 
+import dendron.Errors;
 import dendron.machine.Machine;
 import dendron.tree.ActionNode;
 import dendron.tree.ExpressionNode;
@@ -95,8 +96,12 @@ public class ParseTree {
      * @see dendron.tree.ActionNode#execute(Map)
      */
     public void interpret() {
+        System.out.println("");
+        System.out.println("Interpreting the parse tree...");
+        System.out.println("Interpretation complete.");
         Map<String, Integer> symTab = new HashMap<>();
         pr.execute(symTab);
+        Errors.dump(symTab);
     }
 
     /**

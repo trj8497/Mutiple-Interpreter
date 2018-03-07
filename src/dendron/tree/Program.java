@@ -27,7 +27,9 @@ public class Program extends Object implements ActionNode {
 
     @Override
     public void infixDisplay() {
+        System.out.println("The Program, with expressions in infix notation:");
         for (ActionNode i : prog){
+            System.out.println("");
             i.infixDisplay();
         }
     }
