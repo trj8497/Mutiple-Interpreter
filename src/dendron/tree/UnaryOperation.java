@@ -47,7 +47,7 @@ public class UnaryOperation extends Object implements ExpressionNode{
             Machine.SquareRoot Sqrt = new Machine.SquareRoot();
             push.add(Sqrt);
         }
-        push.addAll(load);
-        return push;
+        load.addAll(push);
+        return load;
     }
 }

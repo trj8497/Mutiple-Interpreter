@@ -98,9 +98,9 @@ public class ParseTree {
     public void interpret() {
         System.out.println("");
         System.out.println("Interpreting the parse tree...");
-        System.out.println("Interpretation complete.");
         Map<String, Integer> symTab = new HashMap<>();
         pr.execute(symTab);
+        System.out.println("Interpretation complete.");
         Errors.dump(symTab);
     }
 
