@@ -44,19 +44,28 @@ public class ParseTree {
      * @return a parse tree for the action
      */
     private ActionNode parseAction( List< String > program ) {
-        if (program.get(0).equals("@")) {
-            program.remove(0);
-            ActionNode action = new Print(parseExpr(program));
-            return action;
-        }
-        else if(program.get(0).equals(":=")){
-            program.remove(0);
-            ActionNode action = new Assignment(program.remove(0), parseExpr(program));
-            return action;
-        }
-        else{
-            Errors.report(Errors.Type.ILLEGAL_VALUE, program.get(0));
+
+        if (program.isEmpty()) {
+            Errors.report(Errors.Type.PREMATURE_END, null);
             return null;
+        } else {
+            String remove1 = program.remove(0);
+            if (remove1.equals("@")) {
+                ActionNode action = new Print(parseExpr(program));
+                return action;
+            } else if (remove1.equals(":=")) {
+                if(program.isEmpty()){
+                    Errors.report(Errors.Type.PREMATURE_END, null);
+                    return null;
+                }
+                else{
+                ActionNode action = new Assignment(program.remove(0), parseExpr(program));
+                return action;
+                }
+            } else {
+                Errors.report(Errors.Type.ILLEGAL_VALUE, remove1);
+                return null;
+            }
         }
     }
 
@@ -67,26 +76,33 @@ public class ParseTree {
      * @return a parse tree for this expression
      */
     private ExpressionNode parseExpr( List< String > program ) {
-        if (BinaryOperation.OPERATORS.contains(program.get(0))){
-            ExpressionNode binary = new BinaryOperation(program.remove(0), parseExpr(program), parseExpr(program));
+        if (program.isEmpty()){
+            Errors.report(Errors.Type.PREMATURE_END, null);
+            return null;
+        }
+        else{
+        String remove1 = program.remove(0);
+        if (BinaryOperation.OPERATORS.contains(remove1)){
+            ExpressionNode binary = new BinaryOperation(remove1, parseExpr(program), parseExpr(program));
             return binary;
         }
-        else if (UnaryOperation.OPERATORS.contains(program.get(0))){
-            ExpressionNode unary = new UnaryOperation(program.remove(0), parseExpr(program));
+        else if (UnaryOperation.OPERATORS.contains(remove1)){
+            ExpressionNode unary = new UnaryOperation(remove1, parseExpr(program));
             return unary;
         }
-        else if (program.get(0).matches("^[a-zA-Z].*")){
-            ExpressionNode var = new Variable(program.remove(0));
+        else if (remove1.matches("^[a-zA-Z].*")){
+            ExpressionNode var = new Variable(remove1);
             return var;
         }
-        else if (program.get(0).matches("\\d+")){
-            ExpressionNode con = new Constant(Integer.parseInt(program.remove(0)));
+        else if (remove1.matches("\\d+")){
+            ExpressionNode con = new Constant(Integer.parseInt(remove1));
             return con;
         }
         else{
-            Errors.report(Errors.Type.ILLEGAL_VALUE, program.get(0));
+            Errors.report(Errors.Type.ILLEGAL_VALUE, remove1);
             return null;
         }
+    }
     }
 
     /**
