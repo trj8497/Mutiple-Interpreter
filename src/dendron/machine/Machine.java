@@ -23,7 +23,7 @@ import dendron.Errors;
  */
 public class Machine {
 
-    /** Do not instatiate this class. */
+    /** Do not instantiate this class. */
     private Machine() {}
 
     public static interface Instruction {
@@ -156,7 +156,12 @@ public class Machine {
         public void execute() {
             int op2 = stack.pop();
             int op1 = stack.pop();
+            if(op2 == 0){
+                Errors.report(Errors.Type.DIVIDE_BY_ZERO, null);
+            }
+            else{
             stack.push(op1 / op2);
+            }
         }
 
         /**
@@ -185,8 +190,12 @@ public class Machine {
          */
         @Override
         public void execute() {
+            if(table.containsKey(ident) == false){
+                Errors.report(Errors.Type.UNINITIALIZED, ident);
+            }else{
             int get = table.get(this.ident);
-            stack.push(get);
+            stack.push(get);}
+
         }
 
         /**

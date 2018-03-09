@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * THIS CLASS IS UNIMPLEMENTED. All methods are stubbed out.
  *
- * @author YOUR NAME HERE
+ * @author Tejaswini Jagtap
  */
 public class ParseTree {
 
@@ -54,7 +54,10 @@ public class ParseTree {
             ActionNode action = new Assignment(program.remove(0), parseExpr(program));
             return action;
         }
-        return null;
+        else{
+            Errors.report(Errors.Type.ILLEGAL_VALUE, program.get(0));
+            return null;
+        }
     }
 
     /**
@@ -76,9 +79,13 @@ public class ParseTree {
             ExpressionNode var = new Variable(program.remove(0));
             return var;
         }
-        else{
+        else if (program.get(0).matches("\\d+")){
             ExpressionNode con = new Constant(Integer.parseInt(program.remove(0)));
             return con;
+        }
+        else{
+            Errors.report(Errors.Type.ILLEGAL_VALUE, program.get(0));
+            return null;
         }
     }
 
